@@ -8,22 +8,14 @@
 *
 */
 
-// Параметры работы скрипта
-// 1 - консольный режим
-// 2 - web-режим
-
-define('CONSOLE_MODE', 1);
-define('WEB_MODE', 2);
-define('EXECUTION_MODE', CONSOLE_MODE); // для корректного отбражения - указать нужный режим
-
 // правильный перенос строки в зависимости от режима 
 // запуска (консольный или веб)
-$eol = null;
-switch (EXECUTION_MODE) {
-    case CONSOLE_MODE: 
+$eol = '';
+switch (PHP_SAPI) {
+    case 'cli': 
         $eol = PHP_EOL;
         break;
-    case WEB_MODE:     
+    default:     
         $eol = '<br>';
 }
 
@@ -121,6 +113,9 @@ $year = date("Y");
  * или даже так
  * <% $year %> // ASP-теги, если подключены
  */
+echo "Вывод ответа на ДЗ №5: $eol";
+echo "Текущий год: $year $eol $eol";
+
 
 // Ответ на вопрос ДЗ № 6.
 function power($val, $pow) {
@@ -166,4 +161,4 @@ $hours_labels = ["час", "часа", "часов"];
 $minutes_labels = ["минута", "минуты", "минут"];
 
 echo  $hours . " " . get_label($hours, $hours_labels) . " " . 
-      $minutes  . " " . get_label($minutes, $minutes_labels);
+      $minutes  . " " . get_label($minutes, $minutes_labels) . $eol . $eol;
