@@ -130,17 +130,18 @@ function power($val, $pow) {
 }
 
 function powerAlt($val, $pow) {
-    if ($pow) return $val * powerAlt($val, --$pow);
+    if ($pow > 2) return $val * powerAlt($val, --$pow);
+    else return $val * $val;
 }
 
 $val = 10;
-$pow = 3;
+$pow = 4;
 $result = power($val, $pow);
 $resultAlt = powerAlt($val, $pow);
 
 echo "Вывод ответа на ДЗ №6*: $eol";
 echo "вывод power(): $val в степени $pow = $result $eol";
-echo "вывод powerAlt(): $val в степени $pow = $result $eol";
+echo "вывод powerAlt(): $val в степени $pow = $resultAlt $eol";
 echo $eol;
 
 
