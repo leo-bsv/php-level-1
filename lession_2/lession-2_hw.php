@@ -129,19 +129,22 @@ function power($val, $pow) {
     else return $result;
 }
 
+function powerAlt($val, $pow) {
+    if ($pow) return $val * powerAlt($val, --$pow);
+}
+
 $val = 10;
 $pow = 3;
 $result = power($val, $pow);
+$resultAlt = powerAlt($val, $pow);
 
 echo "Вывод ответа на ДЗ №6*: $eol";
-echo "$val в степени $pow = $result $eol";
+echo "вывод power(): $val в степени $pow = $result $eol";
+echo "вывод powerAlt(): $val в степени $pow = $result $eol";
 echo $eol;
 
 
 // Ответ на вопрос ДЗ № 7.
-$hours = date("G");
-$minutes = date("i");
-
 function in_range($val, $min, $max) {
     return ($val >= $min && $val <= $max);
 }
@@ -156,9 +159,12 @@ function get_label($value, $labels) {
         return $labels[2];
 }
 
-echo "Вывод ответа на ДЗ №7*: $eol";
+$today = getdate();
 $hours_labels = ["час", "часа", "часов"];
 $minutes_labels = ["минута", "минуты", "минут"];
 
-echo  $hours . " " . get_label($hours, $hours_labels) . " " . 
-      $minutes  . " " . get_label($minutes, $minutes_labels) . $eol . $eol;
+echo "Вывод ответа на ДЗ №7*: $eol";
+echo  $today['hours'] . " " . 
+        get_label($today['hours'], $hours_labels) . " " . 
+      $today['minutes']  . " " . 
+        get_label($today['minutes'], $minutes_labels) . $eol . $eol;
