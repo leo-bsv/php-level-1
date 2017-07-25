@@ -1,0 +1,406 @@
+ /* Подгрузка шрифтов */
+
+@font-face {
+    font-family: Ethnocentric_RG;
+    src: url(../fonts/ethnocentric_rg.ttf);
+}
+
+/* Глобальные стили */
+
+body {
+	background: #8DBFD7;
+	font-family: sans;
+	font-size: 12px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.container {
+	margin: 0px auto;
+	padding: 0px;
+	min-width: 70%;
+	max-width: 90%;	
+}
+
+.clearfix {
+	clear: both;
+}
+
+.center {
+	text-align: center;
+}
+
+/* конец глобальных стилей */
+
+/* Стилизация заголовка */
+
+.header {
+	background: #012056;	
+	background-image: url("../img/bg.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.topik {
+	display: flex;
+	flex-wrap: nowrap;
+}
+
+.topikCrumbs {
+	display: block;
+	opacity: 0.3;
+	height: 20px;
+	width: 10%;
+	float: left;	
+	margin: 10px 0px 20px 10px;
+	border-top-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.topikCrumbs:nth-child(1) {
+	background: #235D79;
+}
+
+.topikCrumbs:nth-child(2) {
+	background: #034769;
+}
+
+.topikCrumbs:nth-child(3) {
+	background: #086FA1;
+}
+
+.topikCrumbs:nth-child(4) {
+	background: #63ADD0;
+}
+
+.topikCrumbs:nth-child(5) {
+	background: #348AB4;
+	min-width: 60%;
+	width: auto;
+	margin: 10px 10px 20px 10px;
+}
+
+.logo {
+	display: inline-block;	
+	float: left;
+	font-family: Ethnocentric_RG; 
+	font-size: 24px;
+	margin: 0px 10px 10px 20px;
+	color: white;
+	opacity: 0.9;
+	font-style: normal;	
+}
+
+h1 {	
+	display: inline-block;	
+	color: white;
+	font-size: 20px;
+	font-style: italic;
+	font-weight: 100;	
+	margin: 4px 10px 10px 20px;
+	clear: both;	
+}
+
+ul.menu {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	font-family: sans-serif;
+	font-size: 12pt;
+	/*width: 100%;*/
+	margin: 15px 0px 0px 10px;
+	padding: 0px 10px 0px 0px;
+    clear: both;
+}
+
+ul.menu li {
+	display: block;
+	margin: 2px 2px 2px 2px;
+	border: 1px solid #DFE2E9;
+	border-top-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	background-color: #0A325E;
+}
+
+ul.menu li:hover {
+	background-color: #1F4C7C;
+	border: 1px solid #FFC638;
+}
+
+ul.menu li:hover a {
+	color: #FFD773;
+}
+
+ul.menu li:hover .marker {
+	background-color: #FFC638;
+}
+
+ul.menu a {
+	display: block;
+	padding: 5px 15px;
+	color: white;
+	text-decoration: none;
+	position: relative;
+}
+
+ul.menu a:visited {
+	color: white;
+	opacity: 1;
+}
+
+.marker {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 7px;
+	width: 5px;
+	background-color: #DFE2E9;
+	margin-right: 10px;
+}
+
+/* конец стилизации заголовка */
+
+/* Стилизация контента */
+
+.content {
+	clear: both;
+	display: block;
+	background: white;	
+	width: 100%;
+	margin-top: 2px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.content > * {
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+.abstraction {
+	width: 30%;
+	float: left;
+}
+
+.goods {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+.item {
+	display: block;
+	width: 24%;
+	min-width: 150px;
+	text-align: center;
+	border: 1px dotted #FF5307;
+	padding: 10px;
+	margin: 10px;
+}
+
+.item:hover {
+	border: 1px dotted white;
+}
+
+.item h3 {
+	font-size: 13px;
+}
+
+.item img {
+	width: 100%;
+}
+
+.item a {
+	font-size: 12px;
+	text-decoration: none;
+	color: #FF5307;
+}
+
+.item a:visited {
+	color: #A67600;
+}
+
+.smallpic {
+	width: 120px;
+}
+
+.bigpic {
+	float: left; 
+	margin-left: 20px; 
+	margin-right: 50px; 
+	margin-bottom: 20px; 
+	display: block; 
+	height: 370px
+}
+
+h2 {
+	color: #FF5307;
+	font-size: 15px;
+}
+
+h3 {
+	font-size: 18px;
+	font-weight: 400;
+	background-color: #eaeaea;
+}
+
+.short-descr {
+	font-size: 14px;
+	font-style: italic;
+	background-color: #707070;	
+	line-height: 16px;
+}
+
+.long-descr {
+	color: #484343;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 24px;
+	text-align: left;
+}
+
+.checkmark {
+	list-style-image: url("../img/checkmark.png");
+}
+
+.content p:first-letter {
+/*	font-size: 20px;
+	color: blue;*/
+}
+
+.mapflex {
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: center;
+}
+
+.buy-button {
+	text-decoration: none;
+	display: block;
+	font-size: 20px;
+	font-weight: 500;
+	border: 1px solid blue;
+	color: blue;
+	height: 35px;
+	width: 100px;
+	text-align: center;
+	border-radius: 5px;
+	padding-top: 13px;
+	background-image: url("../img/basket_blue.png");
+	background-position: 10px 6px;
+	background-size: 30px;
+	background-repeat: no-repeat;
+	padding-left: 35px;
+}
+
+.buy-button:hover {
+	background-color: blue;
+	color: white;
+	background-image: url("../img/basket_white.png");
+}
+
+/* конец стилизации контента */
+
+/* Стилизация подвала */
+
+.footer {
+	clear: both;
+	background-color: #0F4989;
+	color: white;
+	margin-top: 2px;
+	padding: 10px;
+	height: 100px;
+}
+
+.footer p {
+	margin: 5px;
+	text-align: right;
+}
+
+/* конец стилизации подвала */
+
+
+/* Стилизация форм */
+
+
+form > div {
+	width: 100%;
+	margin: 5px 0px 5px 0px;
+}
+
+form > textarea {
+	float: left;
+}
+
+input[type="email"]:focus {
+	background: #FFD773;
+}
+
+.label {
+	width: 10%;
+	height: 24px;
+	display: inline-block;
+	text-align: right;
+	margin: 0px 0px 0px 5px;
+}
+
+.field {
+	width: 80%;
+	height: 24px;
+	display: inline-block;
+	margin: 0px 0px 0px 5px;
+	color: green;
+	font-size: 15px;
+	font-style: normal;
+	font-family: sans-serif;
+	text-transform: capitalize;
+}
+
+.message-label {
+	height: 24px;
+	margin: 10px 0px 0px 0px;
+}
+
+.message {
+	width: 95%;
+	height: 200px;
+	margin: 5px 0px 5px 0px;	
+	color: green;
+	font-size: 15px;
+	font-style: normal;
+	font-family: sans-serif;	
+	text-transform: capitalize;
+}
+
+.buttons {
+	text-align: center;
+}
+
+/* конец стилизации форм */
+
+/* Стилизация таблиц */
+
+table {
+	border-collapse: collapse;
+	width: 80%;
+}
+
+th, td {
+	border: 1px solid gray;
+	text-align: center;
+}
+
+tr:nth-child(odd) {
+	background-color: #EAEAEA;
+}
+
+tr:hover {
+	background-color: #FFC638;
+}
+
+th {
+	background-color: #0A325E;
+	color: white;
+}
+
+/* конец стилизации таблиц */
