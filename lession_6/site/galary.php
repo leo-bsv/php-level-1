@@ -74,7 +74,6 @@
             <div class="content">
                 <div class="galary">
                     <?php
-
                         $images = getImages($link);
                         if (!empty($images))
                             foreach ($images as $id => $filename) {

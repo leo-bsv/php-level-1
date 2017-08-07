@@ -50,7 +50,11 @@ function prepareDB(&$link) {
          'exists' => false,
          'sql' => 'create table if not exists `goods` ('
                     . '`id` int auto_increment primary key, '
-                    . '`filename` tinytext not null);'],        
+                    . '`filename` tinytext not null,'
+                    . '`name` tinytext not null,'
+                    . '`short_descr` text,'
+                    . '`feature` text,'
+                    . '`long_descr` text);'],        
 
         ['name' => 'goods_recalls',
          'exists' => false,
@@ -95,7 +99,7 @@ function prepareDB(&$link) {
         if (!$exists) {            
             if (!mysqli_query($link, $tables_sql[$table])) {
                 return false; // не удалось создать таблицу
-            }   
+            }
         } 
     }    
     unset ($tables);
@@ -111,6 +115,7 @@ function connectToDB(&$error){
     if (isset($link)) {
         if (prepareDB($link)) {
             $error = '';
+            mysqli_set_charset($link, "utf8");
             return $link;
         } else {
             $error = 'Ошибка при попытке подключения к базе данных.';
@@ -188,4 +193,27 @@ function getComments(&$link, $images_id) {
                       'comment' => $row['comment']];
         }
     return $arr;
+}
+
+// получение массива данных о продуктах
+function getProducts(&$link) {
+    $sql = "select * from `goods`;";
+    $result = mysqli_query($link, $sql);
+    $arr = [];
+    if ($result)
+        while ($row = mysqli_fetch_assoc($result)) {
+            $arr[] = $row;
+        }
+    return $arr;
+}
+
+// получение данных о продукте по идентификатору
+function getProductById(&$link, $id) {
+    $sql = "select `name`, `filename`, `short_descr`, `feature`, "
+            . "`long_descr` from goods where `id` = '$id';";
+    $result = mysqli_query($link, $sql);
+    if ($result)
+        while ($row = mysqli_fetch_assoc($result)) {
+            return $row;
+        }
 }

@@ -1,6 +1,20 @@
 <?php
     require_once 'config.php';
+    require_once INCLUDES_DIR . 'db_proc.php';     
+    require_once INCLUDES_DIR . 'utils.php';
     require_once INCLUDES_DIR . 'render.php';
+    
+    $h1 = 'Стальные двери';
+    $title = 'Каталог';
+    $year = date("Y");   
+    
+    $alert = ''; 
+    $link = connectToDB($alert);
+        
+    // Ответ на вопросы №4 ДЗ к уроку № 6.
+
+    $id = getReqAsInt('id'); 
+    $products = getProducts($link);
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -32,26 +46,13 @@
 		<div class="content">
 			<h2>Каталог</h2>
 			<div class="goods">
+                            <?php foreach ($products as $product): ?>
 				<div class="item">
-					<h3>Дверной блок М1</h3>
-					<img src="img/m1.png" alt="Дверной блок М1">
-					<div><a href="goods/m1.html">подробнее...</a></div>
+					<h3><?= $product['name'] ?></h3>
+					<img src="<?= $product['filename'] ?>" alt="<?= $product['name'] ?>">
+					<div><a href="product.php?id=<?= $product['id'] ?>">подробнее...</a></div>
 				</div>
-				<div class="item">
-					<h3>Дверной блок М2</h3>
-					<img src="img/m2.png" alt="Дверной блок М2">
-					<div><a href="goods/m2.html">подробнее...</a></div>
-				</div>
-				<div class="item">
-					<h3>Дверной блок П1</h3>
-					<img src="img/p1.png" alt="Дверной блок П1">
-					<div><a href="goods/p1.html">подробнее...</a></div>
-				</div>		
-				<div class="item">
-					<h3>Дверной блок П2</h3>
-					<img src="img/p2.png" alt="Дверной блок П2">
-					<div><a href="goods/p2.html">подробнее...</a></div>
-				</div>		
+                            <?php endforeach; ?>	
 			</div>			
 			<div class="clearfix"></div>
 			<h2>Прайс</h2>

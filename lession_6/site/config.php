@@ -1,4 +1,6 @@
 <?php
+// кодировка по-умолчанию
+//setlocale(LC_ALL, 'en_US.utf-8');
 
 // папка подключаемых файлов
 if (!defined('INCLUDES_DIR')) {
