@@ -66,7 +66,7 @@ if (!defined('DB_USERNAME')) {
 }
 // пароль пользователя
 if (!defined('DB_PASSWORD')) {
-    define('DB_PASSWORD', 'Ltblitn');
+    define('DB_PASSWORD', 'bla-bla');
 }
 // название БД
 if (!defined('DB_NAME')) {
