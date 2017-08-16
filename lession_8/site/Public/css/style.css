@@ -337,6 +337,11 @@ h3 {
     background-image: url("../img/basket_white.png");
 }
 
+.loginForm {
+    margin: 0 auto; 
+    width: 200px;
+}
+
 /* конец стилизации контента */
 
 /* Стилизация подвала */
