@@ -27,7 +27,7 @@ class Request
     // функция получения строковых данных из запроса
     public static function getValAsStr($val) {
         if (isset($_REQUEST[$val])) {
-            return (string) htmlspecialchars(strip_tags($_REQUEST[$val]));
+            return (string) DbDefender::escapeString(htmlspecialchars(strip_tags($_REQUEST[$val])));
         } else {
             return '';
         }

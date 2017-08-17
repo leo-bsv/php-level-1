@@ -6,3 +6,10 @@
             alt="Valid CSS!" />
     </a>
 </p>
+<script>
+    var messages = [<?= $messages ?>];
+
+    messages.forEach(function(msg, i, messages) {
+        if (msg != '') alert(msg);
+    });    
+</script>  

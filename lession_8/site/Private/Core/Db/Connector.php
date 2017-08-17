@@ -83,6 +83,7 @@ class DbConnector implements InterfaceDb
                         . '`id` int auto_increment primary key, '
                         . '`login` tinytext not null, '
                         . '`pass` tinytext not null, '
+                        . '`email` tinytext not null, '
                         . '`role` int not null);'],
 
             ['name' => 'orders',

@@ -15,15 +15,20 @@ class ModelUsers
     const ROLE_USER = 10;  // зарегистрированный пользователь
     const ROLE_ADMON = 20; // администратор
     
-    // авторизация пользователя
-    public function login($login, $pass)
+    private function getUserId($login, $pass)
     {
         $pass = $this->encryptPassword($pass);
         $sql = "select `id` from `users` where `login` = '$login' and `pass` = '$pass';";
         $user_id = mysqli_query(App::$db, $sql);
+    }
+    
+    // авторизация пользователя
+    public function login($login, $pass)
+    {
+        $id = $this->getUserId($login, $pass);
         if ($id !== false) {
             $session = new Session();
-            $this->session->start($user_id);
+            $session->start($user_id);
         } else {
             App::Msg('Введены неверные данные.');
         }
@@ -38,6 +43,24 @@ class ModelUsers
         unset($session);
     }    
     
+    // обновление данных пользователя
+    public function update($login, $pass, $email)
+    {
+        if ($empty($login)) App::Msg ('Логин не может быть пустым.');
+        if ($empty($pass)) App::Msg ('Пароль не может быть пустым.');
+        if ($empty($email)) App::Msg ('Эл. ящик не может быть пустым.');        
+        
+        $id = $this->getUserIdFromSession();
+        if ($id !== false) {
+            $sql = "update `users` set";
+            if (!empty($login)) $sql .= " `login`='$login'";
+            if (!empty($pass)) $sql .= " `pass`='$pass'";
+            if (!empty($email)) $sql .= " `email`='$email'";
+            $sql .= " where `id`='$id';";
+            return mysqli_real_query(App::$db, $sql);
+        }
+    }
+    
     // получение идентификатора пользователя из сессии
     public function getUserIdFromSession()
     {
@@ -50,12 +73,11 @@ class ModelUsers
     // получение логина и роли пользователя по идентификатору 
     public function getUserById($userId)
     {
-        $userId = DbDefender::escapeString($userId);
-        $sql = "select `login`, `role` from `users` where `id` = '$userId';";
+        $sql = "select `login`, `email`, `role` from `users` where `id` = '$userId';";
         $result = mysqli_query(App::$db, $sql);
         $result = mysqli_fetch_assoc($result);
         if (empty($result))
-            return ['login' => 'Гость', 'role' => 0];
+            return ['login' => 'Гость', 'email' => '', 'role' => 0];
         else return $result;
     }
     

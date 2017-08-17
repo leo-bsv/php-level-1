@@ -10,7 +10,7 @@
 
 class Session implements InterfaceSession
 {
-    private $user_id;
+    private $userId;
     public $active = false;    
     private $id;
     
@@ -26,28 +26,28 @@ class Session implements InterfaceSession
         {           
             $this->active = true;
             $this->id = $_COOKIE[self::SESSION_NAME];            
-            $this->user_id = file_get_contents(self::SESSIONS_PATH . $this->id);            
+            $this->userId = file_get_contents(self::SESSIONS_PATH . $this->id);            
         }
     }
 
     /**
      * Активировать сессию
      */
-    public function start($user_id)
+    public function start($userId)
     {
         // сначала удалим все сессии юзера
         $sessions = array_diff(scandir(self::SESSIONS_PATH), array('..', '.'));
         foreach ($sessions as $session)
         {
             $session_user = trim(file_get_contents(self::SESSIONS_PATH . $session));
-            if ($session_user === $user_id)
+            if ($session_user === $userId)
                 unlink(self::SESSIONS_PATH . $session);
         }
         // затем сгенерируем новый идентификатор сессии и сохраним её
         $new_session_id = $this->genSessionId();
         $this->id = $new_session_id;
         setcookie(self::SESSION_NAME, $new_session_id, 0, '/', '', false, true);
-        file_put_contents(self::SESSIONS_PATH . $new_session_id, $user_id);        
+        file_put_contents(self::SESSIONS_PATH . $new_session_id, $userId);        
         $this->active = true;
     }    
     
@@ -56,7 +56,7 @@ class Session implements InterfaceSession
      */
     public function getUserId()
     {
-       return $this->user_id; 
+       return $this->userId; 
     }
     
     /**
@@ -74,7 +74,7 @@ class Session implements InterfaceSession
      */
     public function stop()
     { 
-        unlink(self::SESSIONS_PATH . $this->id);        
+        unlink(self::SESSIONS_PATH . $this->id);
         setcookie(self::SESSION_NAME, '', time()-3600);            
     }       
 }

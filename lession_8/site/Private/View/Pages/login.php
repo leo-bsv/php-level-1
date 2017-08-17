@@ -1,4 +1,4 @@
-<div class="loginForm">
+<div class="uniForm">
     <h2>Авторизация</h2>
     <form action="login" method="post">
         <div>

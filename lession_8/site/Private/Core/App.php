@@ -18,6 +18,9 @@ class App implements InterfaceConfiguration
     // уровень доступа запроса
     public static $access;
     
+    // сессия
+    public static $session;
+      
     // сообщения приложения
     private static $messages = [];
     
@@ -28,6 +31,8 @@ class App implements InterfaceConfiguration
         $this->configurate();
         // подключаемся к базе данных
         new DbConnector();
+        // поднимаем сессию
+        self::$session = new Session();        
         // получаем уровень доступа запроса
         new Access();
     }
@@ -70,24 +75,42 @@ class App implements InterfaceConfiguration
         
         $full_controller_class_name = 'Controller' . $controller_name . $action;
         
+        // если сущность отсутствует в принципе
+        if (!class_exists($full_controller_class_name)) {
+            $full_controller_class_name = 'ControllerIndexIndex';
+            self::Msg('Запрошенной страницы или сервиса не существует.');
+        }
+        
         // если сущность является одной из главнх страниц, то 
         // сгенерируем меню сайта
         if ($full_controller_class_name::ENTITY == InterfaceEntity::PRIME_PAGE) {
             App::$menu = (new ModelMenu())->buildMenu();
         }              
         
-        try {
-            $controller = new $full_controller_class_name($params);
-            //$controller->$action($params);
-        } catch (Exception $ex) {
-            self::Msg('Ошибка 404. Нет такой страницы.');
+        // если доступ к сущности закрыт
+        if (App::$access < $full_controller_class_name::ACCESS) {
+           self::Msg('Доступ к запрошенной странице закрыт.'); 
+           $full_controller_class_name = 'ControllerIndexIndex';
         }
+        
+        $controller = new $full_controller_class_name($params);
     }
 
     // добавление нового сообщения в стек сообщений
     public static function Msg($text)
     {
         self::$messages[] = $text;
+    }
+
+    // выгрузка сообщений
+    public static function pullMessages()
+    {
+        $result = '';
+        foreach (self::$messages as $message) {
+            if (empty($result)) $result .= '"' . $message . '"';
+            else $result .= ', "' . $message . '"';
+        }
+        return $result;
     }
 
 }
