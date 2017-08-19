@@ -8,51 +8,37 @@
  *
  */
 
-class ControllerProfileIndex extends Controller implements InterfaceProfileIndex 
+class ControllerProfileIndex extends ControllerProfileBase implements InterfaceProfileIndex
 {
     public function __construct($params)
     {
         parent::__construct($params);
 
-        // создадим объект модели для работы с пользователями
-        $users = new ModelUsers();
-        
-        // узнаём - обратилась ли к нам форма или страница открыта по ссылке
-        $formSended = Request::valueExists('login');
-        
-        // если пришли данные с формы
-        if ($formSended) {
-            $login = Request::getValAsStr('login');
-            $pass = Request::getValAsStr('pwd');
-            $email = Request::getValAsStr('email');
-        }
-        
-        // если данные не пустые - обновим информацию в БД
-        if (App::$access > InterfaceAccess::GUEST) {
-            if (!empty($login) && !empty($pass) && !empty($email)) {
-                $users->update($login, $pass, $email);
-                $title = self::TITLE;
+        $this->action = '/profile';
+        $this->title = self::TITLE;
+        // если пользователь зарегистрирован
+        if (in_array(App::$access, InterfaceProfileIndex::ACCESS)) {
+            // обновим информацию в БД
+            $userId = App::$session->getUserId();
+            $no_errors = true;            
+            if ($this->pass !== $this->passr) {
+                App::Msg('Пароли не совпадают');
+                $no_errors = false;
             }
-        } else {
-            if (!empty($login) && !empty($pass) && !empty($email)) {
-                $users->registerUser($login, $pass, $email);
-                $title = 'Регистрация';
+            if (!empty($this->login) && !$this->users->loginUnique($this->login, $userId)) {
+                App::Msg('Логин не уникален - выберите другой логин.');
+                $no_errors = false;
             }
+            if (!empty($this->email) && !$this->users->emailUnique($this->email, $userId)) {
+                App::Msg("Е-мэйл не уникален - выберите другой е-мэйл.");
+                $no_errors = false;
+            }
+
+            if ($no_errors) {
+                $this->users->update($this->login, $this->pass, $this->email);
+                // перейдём на страницу профиля
+                //header('Location:/profile');
+            }                
         }
-        $h1 = $title;
-        
-        // если страница открыта по ссылке, получим данные из БД
-        if (!$formSended) {
-            $userId = $users->getUserIdFromSession();
-            $userData = $users->getUserById($userId);
-            $login = $userData['login'];
-            $email = $userData['email'];
-        }
-        
-        $this->view->addVar('title', $title);
-        $this->view->addVar('h1', $title);
-        $this->view->addVar('login', $login);
-        $this->view->addVar('email', $email);
-        $this->view->addVar('content', $this->view->renderPage('profile'));
     }   
 }

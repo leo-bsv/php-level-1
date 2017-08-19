@@ -8,27 +8,26 @@
  *
  */
 
-class ModelUsers
+class ModelUsers implements InterfaceAccess
 {
-    // роли пользователей на сайте
-    const ROLE_GUEST = 0;  // гость
-    const ROLE_USER = 10;  // зарегистрированный пользователь
-    const ROLE_ADMON = 20; // администратор
-    
+  
     private function getUserId($login, $pass)
     {
         $pass = $this->encryptPassword($pass);
         $sql = "select `id` from `users` where `login` = '$login' and `pass` = '$pass';";
-        $user_id = mysqli_query(App::$db, $sql);
+        $result = mysqli_query(App::$db, $sql);
+        $result = mysqli_fetch_assoc($result);
+        return $result['id'];
     }
     
     // авторизация пользователя
     public function login($login, $pass)
     {
-        $id = $this->getUserId($login, $pass);
-        if ($id !== false) {
-            $session = new Session();
-            $session->start($user_id);
+        $login = DbDefender::escapeString($login);
+        $userId = $this->getUserId($login, $pass);
+        if ($userId !== false && isset($userId)) {
+            App::$session = new Session();
+            App::$session->start($userId);            
         } else {
             App::Msg('Введены неверные данные.');
         }
@@ -46,28 +45,43 @@ class ModelUsers
     // обновление данных пользователя
     public function update($login, $pass, $email)
     {
-        if ($empty($login)) App::Msg ('Логин не может быть пустым.');
-        if ($empty($pass)) App::Msg ('Пароль не может быть пустым.');
-        if ($empty($email)) App::Msg ('Эл. ящик не может быть пустым.');        
-        
-        $id = $this->getUserIdFromSession();
+        $login = DbDefender::escapeString($login);
+        if (!empty($pass)) $pass = $this->encryptPassword($pass);
+        $email = DbDefender::escapeString($email);
+        $id = App::$session->getUserId();
         if ($id !== false) {
             $sql = "update `users` set";
-            if (!empty($login)) $sql .= " `login`='$login'";
-            if (!empty($pass)) $sql .= " `pass`='$pass'";
-            if (!empty($email)) $sql .= " `email`='$email'";
-            $sql .= " where `id`='$id';";
+            $values = [];
+            if (!empty($login)) $values[] = " `login`='$login'";
+            if (!empty($pass)) $values[] = " `pass`='$pass'";
+            if (!empty($email)) $values[] = " `email`='$email'";
+            $sql .= implode(',', $values) . " where `id`='$id';";
             return mysqli_real_query(App::$db, $sql);
         }
     }
+        
+    // уникальный ли логин?
+    private function isUnique($fieldName, $fieldValue, $userId='') {
+        $fieldValue = DbDefender::escapeString($fieldValue);
+        $sql = "select count(*) as `count` from `users` where `$fieldName`='$fieldValue'";
+        if (!empty($userId)) { 
+            $sql .= " and `id` != '$userId';";
+        } else {
+            $sql .= ";";
+        }
+        $result = mysqli_query(App::$db, $sql);
+        $result = mysqli_fetch_assoc($result);
+        return $result['count'] == 0 ? true : false;        
+    }
     
-    // получение идентификатора пользователя из сессии
-    public function getUserIdFromSession()
-    {
-        $session = new Session();
-        if ($session->active)
-            return $session->getUserId();
-        else return false;
+    // уникальный ли е-мэйл?
+    public function emailUnique($email, $userId='') {
+        return $this->isUnique('email', $email, $userId);
+    }
+    
+    // уникальный ли логин?
+    public function loginUnique($login, $userId='') {
+        return $this->isUnique('login', $login, $userId);
     }
     
     // получение логина и роли пользователя по идентификатору 
@@ -77,18 +91,21 @@ class ModelUsers
         $result = mysqli_query(App::$db, $sql);
         $result = mysqli_fetch_assoc($result);
         if (empty($result))
-            return ['login' => 'Гость', 'email' => '', 'role' => 0];
+            return ['login' => 'Гость', 'email' => '', 'role' => self::GUEST];
         else return $result;
     }
     
     // добавление пользователя
-    public function registerUser($login, $pass)
+    public function registerUser($login, $pass, $email)
     {
         $login = DbDefender::escapeString($login);
-        $pass = encryptPassword($pass);
-        $sql = "insert into `users` (`login`, `pass`, `role`) "
-                . "values ('$login', '$pass', '" . self::ROLE_USER . "');";
-        return mysqli_query(App::$db, $sql);    
+        $pass = $this->encryptPassword($pass);
+        $email = DbDefender::escapeString($email);
+        $sql = "insert into `users` (`login`, `pass`, `email`, `role`) "
+                . "values ('$login', '$pass', '$email','" . self::USER . "');";
+        if (mysqli_query(App::$db, $sql)) {
+            return mysqli_insert_id(App::$db);
+        }
     }
     
     // удаление пользователя

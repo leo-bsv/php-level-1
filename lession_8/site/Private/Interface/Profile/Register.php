@@ -10,9 +10,8 @@
 
 interface InterfaceProfileRegister extends InterfaceEntity
 {
-    const MENU_ITEM = 'Регистрация';
-    const TITLE = 'Регистрация';
-    const LINK = 'profile/register';
-    const ENTITY = self::PRIME_PAGE;
-    const ACCESS = self::GUEST;
+    const TITLE = 'Регистрация на сайте';
+    const LINK = '/profile/register';
+    const ENTITY = self::EXTRA_PAGE;
+    const ACCESS = [self::GUEST];
 }

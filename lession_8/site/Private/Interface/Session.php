@@ -11,7 +11,7 @@
 interface InterfaceSession
 {
     // путь к папке сессий
-    const SESSIONS_PATH = 'Sessions/';    
+    const SESSIONS_PATH = App::WORK_PATH . 'Sessions/';    
     // название переменной сессии
     const SESSION_NAME = 'SID';   
 }

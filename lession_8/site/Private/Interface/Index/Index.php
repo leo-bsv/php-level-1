@@ -12,7 +12,7 @@ interface InterfaceIndexIndex extends InterfaceEntity
 {
     const MENU_ITEM = 'Главная';
     const TITLE = 'Интернет-магазин стальных дверей';
-    const LINK = 'index';
+    const LINK = '/index';
     const ENTITY = self::PRIME_PAGE;
-    const ACCESS = self::GUEST;
+    const ACCESS = [self::GUEST, self::USER, self::ADMIN];
 }

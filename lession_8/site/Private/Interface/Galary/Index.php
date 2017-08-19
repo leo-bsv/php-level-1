@@ -12,7 +12,7 @@ interface InterfaceGalaryIndex extends InterfaceEntity
 {
     const MENU_ITEM = 'Галерея';
     const TITLE = 'Галерея изображений пользователей';
-    const LINK = 'galary';
+    const LINK = '/galary';
     const ENTITY = self::PRIME_PAGE;
-    const ACCESS = self::GUEST;   
+    const ACCESS = [self::GUEST, self::USER];   
 }

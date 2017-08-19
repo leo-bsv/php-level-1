@@ -12,7 +12,7 @@ interface InterfaceLoginIndex extends InterfaceEntity
 {
     const MENU_ITEM = 'Вход';
     const TITLE = 'Вход в интернет-магазин';
-    const LINK = 'login';
+    const LINK = '/login';
     const ENTITY = self::PRIME_PAGE;
-    const ACCESS = self::GUEST;
+    const ACCESS = [self::GUEST];
 }

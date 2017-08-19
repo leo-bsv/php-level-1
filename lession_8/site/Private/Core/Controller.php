@@ -12,7 +12,7 @@ class Controller {
     public function __destruct() {
         $this->view->addVar('menu', App::$menu);
         $this->view->addVar('menu_code', $this->view->render('menu'));
-        $this->view->addVar('user', 'somebody');
+        $this->view->addVar('user', App::$username);
         $this->view->addVar('header', $this->view->render('header'));
         $this->view->addVar('messages', App::pullMessages());
         $this->view->addVar('footer', $this->view->render('footer'));        

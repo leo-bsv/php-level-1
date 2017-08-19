@@ -22,6 +22,6 @@ class ControllerGalaryUpload implements InterfaceGalaryUpload
         $galary = new ModelGalary();
         $galary->saveImage($filetype, $filename, $tmpfile, $filesize);
         unset($galary);
-        header("Location:/galary");
+        App::$appHandler->routing('/galary');
     }
 }

@@ -10,6 +10,9 @@
 class App implements InterfaceConfiguration
 {      
     // ссылка на объект базы данных
+    public static $appHandler;
+    
+    // ссылка на объект базы данных
     public static $db;
     
     // ссылка на объект главного меню
@@ -17,6 +20,9 @@ class App implements InterfaceConfiguration
     
     // уровень доступа запроса
     public static $access;
+    
+    // логин пользователя
+    public static $username;
     
     // сессия
     public static $session;
@@ -27,6 +33,7 @@ class App implements InterfaceConfiguration
     // конструктор приложения
     function __construct()
     {
+        self::$appHandler = $this;
         // применяем настройки
         $this->configurate();
         // подключаемся к базе данных
@@ -55,9 +62,9 @@ class App implements InterfaceConfiguration
     }    
     
     // маршрутизация
-    public function routing()
+    public function routing($uri = '')
     {
-        $uri = $_SERVER['REQUEST_URI'];
+        if (empty($uri)) $uri = $_SERVER['REQUEST_URI'];
         $uri = str_replace(['.php','.phtml','.html','.htm'], '', $uri);
         
         $action = 'Index';
@@ -83,13 +90,13 @@ class App implements InterfaceConfiguration
         
         // если сущность является одной из главнх страниц, то 
         // сгенерируем меню сайта
-        if ($full_controller_class_name::ENTITY == InterfaceEntity::PRIME_PAGE) {
+        if ($full_controller_class_name::ENTITY != InterfaceEntity::API_SERVICE) {
             App::$menu = (new ModelMenu())->buildMenu();
         }              
         
         // если доступ к сущности закрыт
-        if (App::$access < $full_controller_class_name::ACCESS) {
-           self::Msg('Доступ к запрошенной странице закрыт.'); 
+        if (!in_array(App::$access, $full_controller_class_name::ACCESS)) {
+           self::Msg('Доступ к запрошенной странице или сервису закрыт.'); 
            $full_controller_class_name = 'ControllerIndexIndex';
         }
         

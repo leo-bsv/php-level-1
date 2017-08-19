@@ -18,7 +18,7 @@ class ControllerGalaryIndex extends Controller implements InterfaceGalaryIndex
         $this->view->addVar('images', (new ModelGalary())->getImages());
         
         // разрешим только зарегистрированным пользователям загружать картинки в галерею
-        if (App::$access >= InterfaceGalaryUpload::ACCESS) {
+        if (in_array(App::$access, InterfaceGalaryUpload::ACCESS)) {
             $this->view->addVar('galary_upload', $this->view->render('galary_upload'));
         }
         

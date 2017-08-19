@@ -11,5 +11,6 @@
         </div>
         <input type="submit" value="Войти">
     </form>
+    <p><a href="<?= $registrationLink ?>">Регистрация на сайте</a></p>
 </div>
 <div class="clearfix"></div>

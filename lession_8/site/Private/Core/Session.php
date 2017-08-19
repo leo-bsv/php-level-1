@@ -11,7 +11,7 @@
 class Session implements InterfaceSession
 {
     private $userId;
-    public $active = false;    
+    private $active = false;    
     private $id;
     
     /**
@@ -76,5 +76,14 @@ class Session implements InterfaceSession
     { 
         unlink(self::SESSIONS_PATH . $this->id);
         setcookie(self::SESSION_NAME, '', time()-3600);            
+        $this->active = false;
     }       
+    
+    /**
+     * Получить состояние сессии
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }   
 }

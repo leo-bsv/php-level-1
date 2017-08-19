@@ -12,7 +12,7 @@ interface InterfaceProfileIndex extends InterfaceEntity
 {
     const MENU_ITEM = 'Профиль';
     const TITLE = 'Профиль пользователя';
-    const LINK = 'profile';
+    const LINK = '/profile';
     const ENTITY = self::PRIME_PAGE;
-    const ACCESS = self::USER;
+    const ACCESS = [self::USER, self::ADMIN];
 }

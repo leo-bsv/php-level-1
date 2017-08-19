@@ -12,5 +12,5 @@ interface InterfaceGalaryComments extends InterfaceEntity
 {
     const LINK = 'galary/comments';
     const ENTITY = self::API_SERVICE;
-    const ACCESS = self::GUEST;
+    const ACCESS = [self::GUEST, self::USER];
 }
