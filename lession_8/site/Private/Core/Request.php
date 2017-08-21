@@ -32,4 +32,13 @@ class Request
             return '';
         }
     }      
+
+    // функция очистки строки
+    public static function clearVal($val) {
+        if (isset($val)) {
+            return (string) DbDefender::escapeString(htmlspecialchars(strip_tags($val)));
+        } else {
+            return '';
+        }
+    }      
 }

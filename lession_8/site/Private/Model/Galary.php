@@ -19,16 +19,17 @@ class ModelGalary implements InterfaceEntity
     const THUMB_HEIGHT = 150;
     const SUPPORTED_IMAGE_TYPES = 'image/jpeg,image/png,image/gif';
     
-    public function __construct(... $params)
+    public function __construct($params = [])
     {
         $this->params = $params;
-        file_exists(self::GALARY_PATH) or mkdir(self::GALARY_PATH);
-        file_exists(self::THUMBS_PATH) or mkdir(self::THUMBS_PATH);
-        file_exists(self::UPLOAD_PATH) or mkdir(self::UPLOAD_PATH);
+        file_exists(App::PUBLIC_PATH . self::GALARY_PATH) or mkdir(App::PUBLIC_PATH . self::GALARY_PATH);
+        file_exists(App::PUBLIC_PATH . self::THUMBS_PATH) or mkdir(App::PUBLIC_PATH . self::THUMBS_PATH);
+        file_exists(App::PUBLIC_PATH . self::UPLOAD_PATH) or mkdir(App::PUBLIC_PATH . self::UPLOAD_PATH);
     }   
 
     // получение массива id-filename
-    public function getImages() {
+    public function getImages() 
+    {
         $sql = "select `id`, `filename` from images order by `views` desc;";
         $result = mysqli_query(App::$db, $sql);
         $arr = [];
@@ -42,9 +43,49 @@ class ModelGalary implements InterfaceEntity
         return $arr;
     }
     
+    public function getImageInfoById()
+    {
+        $imageId = $this->params[0];
+        $sql = "SELECT `path`, `views` FROM `images` where id=$imageId;";
+        $result = mysqli_query(App::$db, $sql);
+        $result = mysqli_fetch_assoc($result);
+        return $result;        
+    }
+    
+    // добавление комментария в базу данных
+    function addImageComment($comment) 
+    {
+        $imageId = $this->params[0];
+        $author = App::$username;
+        if (empty($comment)) { 
+            return false; 
+        } else {
+            $sql = "insert into comments (`images_id`, `author`, `comment`) "
+                    . "values ('$imageId', '$author', '$comment');";
+            return mysqli_query(App::$db, $sql);    
+        }
+    }    
+    
+    // получение комментариев к картинке
+    function getImageComments() 
+    {
+        $imageId = $this->params[0];
+        $sql = "select `author`, `comment` from `comments` "
+                . "where `images_id` = '$imageId';";
+        $result = mysqli_query(App::$db, $sql);  
+        $arr = [];
+        if ($result)
+            while ($row = mysqli_fetch_assoc($result)) {
+                $arr[] = ['author' => $row['author'], 
+                          'comment' => $row['comment']];
+            }
+        return $arr;
+    }    
+    
     // добавление информации о новой картинке в базу данных
-    private function insertImageToDB($filename, $img_path, $size) {
-        $sql = "insert into images (`filename`, `path`, `size`, `views`) "
+    private function insertImageToDB($filename, $img_path, $size) 
+    {
+        $sql = "insert into `images` (`filename`, `path`, `size`, `views`) "
                 . "values ('$filename','$img_path', $size, 0);";
         return mysqli_query(App::$db, $sql);
     }
@@ -64,8 +105,8 @@ class ModelGalary implements InterfaceEntity
             $filename = str_ireplace('jpg', 'jpeg', $filename);
         }
         // создаём имена файлов
-        $img_path = self::UPLOAD_PATH . $filename;
-        $thumb_path = self::THUMBS_PATH . $filename;
+        $img_path = App::PUBLIC_PATH . self::UPLOAD_PATH . $filename;
+        $thumb_path = App::PUBLIC_PATH . self::THUMBS_PATH . $filename;
         // сохраняем файл картинки в папку загрузок
         if (move_uploaded_file($tmpfile, $img_path)) { 
             // генерируем миниатюру
@@ -73,10 +114,11 @@ class ModelGalary implements InterfaceEntity
                     $thumb_path, self::THUMB_WIDTH, self::THUMB_HEIGHT);
         }
         // записываем информацию о картинке в базу данных
-        $this->insertImageToDB($filename, $img_path, $filesize);
+        $this->insertImageToDB($filename, self::UPLOAD_PATH . $filename, $filesize);
     }
     
-    public function createThumbnail($path, $save, $width, $height) {
+    public function createThumbnail($path, $save, $width, $height) 
+    {
         $info = getimagesize($path); //получаем размеры картинки и ее тип
         $size = array($info[0], $info[1]); //закидываем размеры в массив
 

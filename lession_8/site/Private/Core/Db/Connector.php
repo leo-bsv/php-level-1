@@ -90,7 +90,8 @@ class DbConnector implements InterfaceDb
              'exists' => false,
              'sql' => 'create table if not exists `orders` ('
                         . '`id` int auto_increment primary key, '
-                        . '`timestamp` int not null, '
+                        . '`timestamp` timestamp default current_timestamp on update current_timestamp, '
+                        . '`status` int not null, '
                         . '`buyers_id` tinytext not null);'],
 
             ['name' => 'sold_goods',

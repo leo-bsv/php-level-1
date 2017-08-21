@@ -14,5 +14,5 @@ interface InterfaceLogoutIndex extends InterfaceEntity
     const TITLE = '';
     const LINK = '/logout';
     const ENTITY = self::PRIME_PAGE;
-    const ACCESS = [self::USER];
+    const ACCESS = [self::USER, self::ADMIN];
 }

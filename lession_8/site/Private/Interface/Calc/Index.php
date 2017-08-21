@@ -14,5 +14,5 @@ interface InterfaceCalcIndex extends InterfaceEntity
     const TITLE = 'Интернет-калькулятор';
     const LINK = '/calc';
     const ENTITY = self::PRIME_PAGE;
-    const ACCESS = [self::GUEST, self::USER];
+    const ACCESS = [self::GUEST, self::USER,  self::ADMIN];
 }

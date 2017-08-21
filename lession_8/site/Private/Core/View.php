@@ -66,7 +66,6 @@ class View
         ob_start();
         include $path . $template . '.php';
         $var = ob_get_clean();
-        //var_dump($var);
         return $var;
     }
     

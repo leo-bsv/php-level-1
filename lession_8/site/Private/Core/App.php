@@ -77,7 +77,12 @@ class App implements InterfaceConfiguration
             $routes = array_map('ucfirst', $routes);
             $controller_name = $routes[0];
             if (isset($routes[1])) $action = $routes[1];
-            if (count($routes) > 2) $params = array_slice($routes, 2);
+            if (count($routes) > 2) {
+                $rowParams = array_slice($routes, 2);
+                foreach ($rowParams as $param) {
+                    $params[] = Request::clearVal($param);
+                }
+            }
         }
         
         $full_controller_class_name = 'Controller' . $controller_name . $action;

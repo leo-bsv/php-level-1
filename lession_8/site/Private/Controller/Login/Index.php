@@ -19,8 +19,9 @@ class ControllerLoginIndex extends Controller implements InterfaceLoginIndex
         
         if (!empty($login) && !empty($pass)) {
             $users = new ModelUsers();
-            $users->login($login, $pass);
-            if (App::$session->isActive()) header ('Location: /profile');
+            if ($users->login($login, $pass)) {
+                header('Location:'.InterfaceProfileIndex::LINK);
+            }
         }
         
         $this->view->addVar('title', self::TITLE);

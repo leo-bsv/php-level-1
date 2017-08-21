@@ -16,6 +16,6 @@ class ControllerLogoutIndex implements InterfaceLogoutIndex
         App::$session->stop();
         App::$username = 'Гость';
         App::$access = self::GUEST;
-        App::$appHandler->routing('/index');
+        App::$appHandler->routing(InterfaceIndexIndex::LINK);
     }   
 }

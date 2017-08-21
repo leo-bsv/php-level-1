@@ -10,7 +10,13 @@
 
 class ModelUsers implements InterfaceAccess
 {
-  
+    private $params;
+    
+    public function __construct($params = [])
+    {
+        $this->params = $params;
+    }
+    
     private function getUserId($login, $pass)
     {
         $pass = $this->encryptPassword($pass);
@@ -23,13 +29,14 @@ class ModelUsers implements InterfaceAccess
     // авторизация пользователя
     public function login($login, $pass)
     {
-        $login = DbDefender::escapeString($login);
         $userId = $this->getUserId($login, $pass);
         if ($userId !== false && isset($userId)) {
             App::$session = new Session();
-            App::$session->start($userId);            
+            App::$session->start($userId);    
+            return true;
         } else {
             App::Msg('Введены неверные данные.');
+            return false;
         }
     }
 
@@ -45,9 +52,7 @@ class ModelUsers implements InterfaceAccess
     // обновление данных пользователя
     public function update($login, $pass, $email)
     {
-        $login = DbDefender::escapeString($login);
         if (!empty($pass)) $pass = $this->encryptPassword($pass);
-        $email = DbDefender::escapeString($email);
         $id = App::$session->getUserId();
         if ($id !== false) {
             $sql = "update `users` set";
@@ -62,7 +67,6 @@ class ModelUsers implements InterfaceAccess
         
     // уникальный ли логин?
     private function isUnique($fieldName, $fieldValue, $userId='') {
-        $fieldValue = DbDefender::escapeString($fieldValue);
         $sql = "select count(*) as `count` from `users` where `$fieldName`='$fieldValue'";
         if (!empty($userId)) { 
             $sql .= " and `id` != '$userId';";
@@ -98,9 +102,7 @@ class ModelUsers implements InterfaceAccess
     // добавление пользователя
     public function registerUser($login, $pass, $email)
     {
-        $login = DbDefender::escapeString($login);
         $pass = $this->encryptPassword($pass);
-        $email = DbDefender::escapeString($email);
         $sql = "insert into `users` (`login`, `pass`, `email`, `role`) "
                 . "values ('$login', '$pass', '$email','" . self::USER . "');";
         if (mysqli_query(App::$db, $sql)) {
@@ -109,9 +111,9 @@ class ModelUsers implements InterfaceAccess
     }
     
     // удаление пользователя
-    public function deleteUser($userId)
+    public function deleteUser()
     {
-        $userId = DbDefender::escapeString($userId);
+        $userId = $this->params[0];
         $sql = "delete from `users` where `id` = $userId;";
         return mysqli_query(App::$db, $sql);
     }    

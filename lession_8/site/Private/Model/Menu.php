@@ -47,6 +47,8 @@ class ModelMenu implements InterfaceEntity
             
             if (!in_array(App::$access, $interface::ACCESS)) continue;
             
+            if ($interface::ENTITY !== InterfaceEntity::PRIME_PAGE) continue;
+            
             $menu[] = ['link' => $interface::LINK, 
                        'caption' => $interface::MENU_ITEM];
  

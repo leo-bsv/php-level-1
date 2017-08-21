@@ -1,11 +1,14 @@
-<div class="galary">
-    <?php foreach ($images as $image): ?>
-        <div class="image">
-            <a href="galary/view/<?= $image['id'] ?>">
-                <img src="<?= $image['thumb'] ?>" alt="<?= $image['filename'] ?>" width="<?= $image['width'] ?>">
-            </a>
-        </div>
-    <?php endforeach; ?>
-    <div class="clearfix"></div>
+<div class="image">
+    <img src="<?= $imagePath ?>" alt="picture"><br>
 </div>
-<?= $galary_upload ?>
+<p>Просмотров изображения: <?= $imageViews ?></p>
+<?php if (!empty($imageComments)): ?>
+    <h2>Отзывы</h2>
+<?php endif; ?>
+<?php foreach ($imageComments as $imageComment): ?>
+    <p>
+        <?= $imageComment['comment'] ?><br>
+        Автор: <b><?= $imageComment['author'] ?></b>
+    </p>
+<?php endforeach; ?>
+<?= $imageCommentForm ?>

@@ -14,5 +14,5 @@ interface InterfaceContactsIndex extends InterfaceEntity
     const TITLE = 'Наши контакты';
     const LINK = '/contacts';
     const ENTITY = self::PRIME_PAGE;
-    const ACCESS = [self::GUEST, self::USER];
+    const ACCESS = [self::GUEST, self::USER, self::ADMIN];
 }

@@ -38,6 +38,8 @@ interface InterfaceConfiguration
      * относительные пути к публичным рабочим папкам 
      * (относительно папки Public)
      */
+    // путь к рабочей папке
+    const PUBLIC_PATH = '../Public';    
     const IMG_PATH = '/img/';
     const CSS_PATH = '/css/';
     const jS_PATH = '/js/';

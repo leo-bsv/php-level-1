@@ -14,5 +14,5 @@ interface InterfaceGalaryIndex extends InterfaceEntity
     const TITLE = 'Галерея изображений пользователей';
     const LINK = '/galary';
     const ENTITY = self::PRIME_PAGE;
-    const ACCESS = [self::GUEST, self::USER];   
+    const ACCESS = [self::GUEST, self::USER, self::ADMIN];   
 }
