@@ -15,11 +15,26 @@ class ControllerCatalogIndex extends Controller implements InterfaceCatalogIndex
         parent::__construct($params);
         
         $catalog = new ModelCatalog($params);
-        $products = $catalog->getProducts();
-        
-        $this->view->addVar('title', self::TITLE);
-        $this->view->addVar('h1', self::TITLE);
+        $products = $catalog->getProducts();        
         $this->view->addVar('products', $products);
-        $this->view->addVar('content', $this->view->renderPage('catalog'));
+        
+        $addButtonCode = '';
+        if (in_array(App::$access, InterfaceCatalogAdd::ACCESS)) {
+            $addView = new View();
+            $addView->addVars([
+                'addProductLink' => InterfaceCatalogAdd::LINK,
+                'addProductLabel' => InterfaceCatalogAdd::TITLE
+                ]);
+            $addButtonCode = $addView->render('catalog_add');
+            unset($addView);
+        }
+        $this->view->addVar('add', $addButtonCode);
+        
+        $this->view->addVars([
+            'title' => self::TITLE,
+            'h1' => self::TITLE, 
+            'products' => $products, 
+            'content' => $this->view->renderPage('catalog')
+            ]);
     }   
 }

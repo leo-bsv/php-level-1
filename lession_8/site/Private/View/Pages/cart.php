@@ -4,14 +4,14 @@
 <?php else: ?>
 <table>
     <tr>
-        <th>№№</th>
+        <th>ID</th>
         <th>Наименование</th>
         <th>Цена</th>
         <th>Действие</th>
     </tr>
-    <?php foreach ($goods as $key => $product): ?>
+    <?php foreach ($goods as $product): ?>
         <tr>
-            <td><?= $key ?></td>
+            <td><?= $product['goods_id'] ?></td>
             <td><?= $product['name'] ?></td>
             <td><?= $product['price'] ?></td>
             <td><a href="cart/delete/<?= $product['id'] ?>">Удалить</a></td>
@@ -19,7 +19,7 @@
     <?php endforeach; ?>
     <tr>
         <td colspan="2" style="text-align: right">Итого:</td>
-        <td><?= $itog ?></td>
+        <td><?= $sum ?>.00</td>
         <td style="border: 0"></td>
     </tr>
 </table>

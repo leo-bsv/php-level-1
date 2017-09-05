@@ -30,27 +30,57 @@ class ModelCart implements InterfaceAccess
     {
         $sql = "select `id` from `orders` where `buyers_id` = '{$this->userId}' and `status` = '".self::ORDER_PREPARE."';";
         $result = mysqli_query(App::$db, $sql);
-        $result = mysqli_fetch_assoc($result);
-        return $result;
+        return mysqli_fetch_assoc($result);
+    }
+    
+    // подготовим новый заказ, который будет выполнять функцию корзины
+    public function prepareOrder()
+    {
+        $sql = "insert into `orders` (`buyers_id`, `status`) values ({$this->userId}, ".self::ORDER_PREPARE.");";
+        return mysqli_query(App::$db, $sql);
     }
 
+    // добавление товара в корзину
     public function putProductToCart()
     {
         $productId = $this->params[0];
-        
-        $sql = "select @price:=`price` from `goods` where `id` = '$productId';"
-                . "select @orders_id:=`id` from `orders` where `buyers_id` = '{$this->userId}' and `status` = '".self::ORDER_PREPARE."';"
-                . "insert into `sold_goods` (`orders_id`, `price`, `quantity`) "
-                . "values (@orders_id, @price, '1');";
-        return mysqli_query(App::$db, $sql);        
+                     
+        mysqli_autocommit(App::$db, false);
+        mysqli_begin_transaction(App::$db);  
+        $sql = "select @orders_id:=`id` from `orders` where `buyers_id` = '{$this->userId}' and `status` = '".self::ORDER_PREPARE."';";
+        mysqli_query(App::$db, $sql);    
+        $sql = "insert into `sold_goods` (`orders_id`, `goods_id`, `quantity`) values (@orders_id, '$productId', '1');";                
+        mysqli_query(App::$db, $sql);
+        mysqli_commit(App::$db);
     }
     
     // получение списка товаров, находящихся в корзине
     public function getCartList()
     {
-        $sql = "select * from `sold_goods` where `orders_id`=(select `id` from orders where `buyers_id` = '{$this->userId}' and `status`='".self::ORDER_PREPARE."');";
-        $result = mysqli_query(App::$db, $sql);
-        $result = mysqli_fetch_assoc($result);
-        return $result;
+        mysqli_autocommit(App::$db, false);
+        mysqli_begin_transaction(App::$db);
+        $sql = "select @orders_id:=`id` from orders where `buyers_id` = '{$this->userId}' and `status`='".self::ORDER_PREPARE."';";
+        mysqli_query(App::$db, $sql);    
+        $sql = "select `id`, `goods_id`, `name`, `quantity`, `price` from sold_goods inner join goods using (goods_id) where orders_id=@orders_id order by goods_id;";               
+        $result = mysqli_query(App::$db, $sql);    
+        mysqli_commit(App::$db);
+        $arr = [];
+        if ($result)
+            while ($row = mysqli_fetch_assoc($result)) {
+                $arr[] = ['id' => $row['id'],
+                          'goods_id' => $row['goods_id'],
+                          'name' => $row['name'],
+                          'price' => $row['price']];
+            }
+        return $arr;               
+    }
+    
+    // удаление товара из корзины
+    public function deleteFromCart()
+    {
+        $productId = $this->params[0];
+        $preparedOrder = $this->preparedOrder();
+        $sql = "delete from `sold_goods` where `id`='$productId' and `orders_id`='{$preparedOrder['id']}';";
+        mysqli_query(App::$db, $sql);
     }
 }

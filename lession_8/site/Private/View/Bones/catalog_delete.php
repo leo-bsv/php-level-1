@@ -1,0 +1,1 @@
+<p><a href="<?= $delProductLink ?>"><?= $delProductLabel ?></a></p>

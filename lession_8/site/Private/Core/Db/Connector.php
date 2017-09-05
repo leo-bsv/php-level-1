@@ -61,13 +61,14 @@ class DbConnector implements InterfaceDb
             ['name' => 'goods',
              'exists' => false,
              'sql' => 'create table if not exists `goods` ('
-                        . '`id` int auto_increment primary key, '
+                        . '`goods_id` int auto_increment primary key, '
                         . '`filename` tinytext not null,'
                         . '`name` tinytext not null,'
                         . '`short_descr` text,'
                         . '`feature` text,'
                         . '`long_descr` text,'
-                        . '`price` decimal(10, 2));'],        
+                        . '`price` decimal(10, 2),'
+                        . '`count` int);'],        
 
             ['name' => 'goods_recalls',
              'exists' => false,
@@ -90,8 +91,8 @@ class DbConnector implements InterfaceDb
              'exists' => false,
              'sql' => 'create table if not exists `orders` ('
                         . '`id` int auto_increment primary key, '
-                        . '`timestamp` timestamp default current_timestamp on update current_timestamp, '
-                        . '`status` int not null, '
+                        . '`ts` timestamp default current_timestamp on update current_timestamp, '
+                        . '`status` smallint not null, '
                         . '`buyers_id` tinytext not null);'],
 
             ['name' => 'sold_goods',
@@ -99,7 +100,7 @@ class DbConnector implements InterfaceDb
              'sql' => 'create table if not exists `sold_goods` ('
                         . '`id` int auto_increment primary key, '
                         . '`orders_id` int not null, '
-                        . '`price` decimal(10,2) not null, '
+                        . '`goods_id` int not null, '
                         . '`quantity` int not null);'],
 
             ['name' => 'images',

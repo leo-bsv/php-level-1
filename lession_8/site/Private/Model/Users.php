@@ -74,8 +74,13 @@ class ModelUsers implements InterfaceAccess
             $sql .= ";";
         }
         $result = mysqli_query(App::$db, $sql);
-        $result = mysqli_fetch_assoc($result);
-        return $result['count'] == 0 ? true : false;        
+        if ($result !== false) {
+            $result = mysqli_fetch_assoc($result);
+            if ($result['count'] == 0) return true;
+            else return false;           
+        } else {
+            return false;           
+        }
     }
     
     // уникальный ли е-мэйл?
@@ -94,7 +99,7 @@ class ModelUsers implements InterfaceAccess
         $sql = "select `login`, `email`, `role` from `users` where `id` = '$userId';";
         $result = mysqli_query(App::$db, $sql);
         $result = mysqli_fetch_assoc($result);
-        if (empty($result))
+        if (empty($result) || $result === false)
             return ['login' => 'Гость', 'email' => '', 'role' => self::GUEST];
         else return $result;
     }

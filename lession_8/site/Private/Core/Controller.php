@@ -7,6 +7,11 @@ class Controller {
     {        
         $this->view = new View();    
         $this->view->addCss("style");
+        /*
+        $this->view->addVar('h1', '');
+        $this->view->addVar('title', '');
+        $this->view->addVar('content', '');
+         */
     }     
     
     public function __destruct() {

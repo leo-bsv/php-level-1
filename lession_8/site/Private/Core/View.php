@@ -46,11 +46,16 @@ class View
         $this->js_snippets[] = $js_code;
     }
     
-
     // добавим переменную со значением
     public function addVar($var, $value)
     {
         $this->vars[$var] = $value;
+    }
+    
+    // добавим ассоциированный массив переменных
+    public function addVars($array)
+    {
+        $this->vars += $array;
     }
 
     public function render($template, $path = App::TEMPLATES_BONES_PATH)

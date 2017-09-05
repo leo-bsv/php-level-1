@@ -1,0 +1,1 @@
+<p><a href="<?= $addProductLink ?>"><?= $addProductLabel ?></a></p>

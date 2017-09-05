@@ -1,0 +1,1 @@
+<p><a href="<?= $editProductLink ?>"><?= $editProductLabel ?></a></p>
